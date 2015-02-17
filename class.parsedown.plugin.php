@@ -1,5 +1,5 @@
 <?php if (!defined('APPLICATION')) {
-  exit();
+    exit();
 }
 /*
   Copyright 2008, 2009 Vanilla Forums Inc.
@@ -14,61 +14,86 @@ $PluginInfo['Parsedown'] = array(
   'Description' => 'Adapts The New BBCode Parser to work with Vanilla.',
   'Version' => '1.0.0',
   'RequiredApplications' => array('Vanilla' => '2.1.8p2'),
-  'RequiredTheme' => FALSE,
-  'RequiredPlugins' => FALSE,
-  'HasLocale' => FALSE,
+  'RequiredTheme' => false,
+  'RequiredPlugins' => false,
+  'HasLocale' => false,
   'Author' => "GyD",
   'AuthorEmail' => 'contact@gyd.be',
-  'AuthorUrl' => 'http://gyd.be'
+  'AuthorUrl' => 'https://github.com/GyD'
 );
 
 
-Gdn::FactoryInstall('ParsedownFormatter', 'ParsedownPlugin', __FILE__, Gdn::FactorySingleton);
-Gdn::FactoryInstall('ParsedownExtraFormatter', 'ParsedownPlugin', __FILE__, Gdn::FactorySingleton);
+Gdn::FactoryInstall('ParsedownFormatter', 'ParsedownPlugin', __FILE__,
+  Gdn::FactorySingleton);
+Gdn::FactoryInstall('ParsedownExtraFormatter', 'ParsedownPlugin', __FILE__,
+  Gdn::FactorySingleton);
 
-class ParsedownPlugin extends Gdn_Plugin {
+class ParsedownPlugin extends Gdn_Plugin
+{
 
-  private $class;
+    private $class;
 
-  /// CONSTRUCTOR ///
-  public function __construct() {
-    parent::__construct();
-  }
-
-  /**
-   * @return Parsedown|ParsedownExtra
-   */
-  private function parser() {
-    static $formatter;
-
-    if (NULL != $formatter) {
-      return $formatter;
+    /// CONSTRUCTOR ///
+    public function __construct()
+    {
+        parent::__construct();
     }
 
-    require_once __DIR__ . '/parsedown/Parsedown.php';
+    /**
+     * @return Parsedown|ParsedownExtra
+     */
+    private function parser()
+    {
+        static $formatter;
 
-    switch (C('Garden.InputFormatter')) {
-      case 'ParsedownExtra':
-        $parser = 'ParsedownExtra';
-        require_once __DIR__ . '/parsedown-extra/ParsedownExtra.php';
-        break;
-      case 'Parsedown':
-      default:
-        $parser = 'Parsedown';
-        break;
+        if (null != $formatter) {
+            return $formatter;
+        }
+
+        require_once __DIR__ . '/parsedown/Parsedown.php';
+
+        switch (C('Garden.InputFormatter')) {
+            case 'ParsedownExtra':
+                $parser = 'ParsedownExtra';
+                require_once __DIR__ . '/parsedown-extra/ParsedownExtra.php';
+                break;
+            case 'Parsedown':
+            default:
+                $parser = 'Parsedown';
+                break;
+        }
+
+        /** @var Parsedown|ParsedownExtra $formatter */
+        $formatter = new $parser();
+
+        // Enable breaklines if settings is set to true
+        if (C('Plugins.Parsedown.BreaksEnabled', false)) {
+            $formatter->setBreaksEnabled(true);
+        }
+
+        // Enable markupEscaped if settings is set to true
+        if (C('Plugins.Parsedown.markupEscaped', false)) {
+            $formatter->setBreaksEnabled(true);
+        }
+
+        // Enable urlsLinked if settings is set to true
+        if (!C('Plugins.Parsedown.urlsLinked', true)) {
+            $formatter->setBreaksEnabled(false);
+        }
+
+        return $formatter;
+
     }
 
-    $formatter = new $parser();
-    return $formatter;
+    /**
+     * @param $Result
+     * @return mixed
+     */
+    public function Format($Result)
+    {
+        $Result = $this->parser()
+          ->text($Result);
 
-  }
-
-  /**
-   * @param $Result
-   * @return mixed
-   */
-  public function Format($Result) {
-    $Result = $this->parser()->text($Result);
-    return $Result;
-  }
+        return $Result;
+    }
 }
