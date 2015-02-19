@@ -76,10 +76,9 @@ class ParsedownPlugin extends Gdn_Plugin
             $formatter->setBreaksEnabled(true);
         }
 
-        // Enable urlsLinked if settings is set to true
-        if (!C('Plugins.Parsedown.urlsLinked', true)) {
-            $formatter->setBreaksEnabled(false);
-        }
+        // Don't link urls, let's use the Garder Links Formatter
+        $formatter->setUrlsLinked(false);
+
 
         return $formatter;
 
@@ -93,6 +92,9 @@ class ParsedownPlugin extends Gdn_Plugin
     {
         $Result = $this->parser()
           ->text($Result);
+
+        $Result = Gdn_Format::Links($Result);
+        $Result = Gdn_Format::Mentions($Result);
 
         return $Result;
     }
