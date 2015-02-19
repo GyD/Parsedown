@@ -23,17 +23,15 @@ $PluginInfo['Parsedown'] = array(
 );
 
 
-Gdn::FactoryInstall('ParsedownFormatter', 'ParsedownPlugin', __FILE__,
-  Gdn::FactorySingleton);
-Gdn::FactoryInstall('ParsedownExtraFormatter', 'ParsedownPlugin', __FILE__,
-  Gdn::FactorySingleton);
+Gdn::FactoryInstall('ParsedownFormatter', 'ParsedownPlugin', __FILE__, Gdn::FactorySingleton);
+Gdn::FactoryInstall('ParsedownExtraFormatter', 'ParsedownPlugin', __FILE__, Gdn::FactorySingleton);
 
 class ParsedownPlugin extends Gdn_Plugin
 {
 
-    private $class;
-
-    /// CONSTRUCTOR ///
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         parent::__construct();
