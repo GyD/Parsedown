@@ -26,6 +26,8 @@ $PluginInfo['Parsedown'] = array(
 Gdn::FactoryInstall('ParsedownFormatter', 'ParsedownPlugin', __FILE__, Gdn::FactorySingleton);
 Gdn::FactoryInstall('ParsedownExtraFormatter', 'ParsedownPlugin', __FILE__, Gdn::FactorySingleton);
 
+require_once __DIR__ . '/vendor/autoload.php';
+
 class ParsedownPlugin extends Gdn_Plugin
 {
 
@@ -42,9 +44,9 @@ class ParsedownPlugin extends Gdn_Plugin
      * @return mixed
      */
     public function Format($Result)
-    {
-        $test = new \GyD\BootstrapResponsiveEmbedFormatter\BootstrapResponsiveEmbedFormatter();
-        $Result = $test->format($Result);
+    {ini_set("display_errors", 1);
+        $embedFormatter = new \GyD\BREFormatter\BREF();
+        $Result = $embedFormatter->format($Result);
 
         $Result = $this->Parser()
           ->text($Result);
@@ -64,11 +66,6 @@ class ParsedownPlugin extends Gdn_Plugin
 
         if (null != $formatter) {
             return $formatter;
-        }
-
-        // If classes alreadu exists, do not include vendor autoloader
-        if (!class_exists('ParsedownExtra') || !class_exists('Parsedown')) {
-            require_once __DIR__ . '/vendor/autoload.php';
         }
 
         switch (C('Garden.InputFormatter')) {
