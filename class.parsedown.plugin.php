@@ -48,7 +48,10 @@ class ParsedownPlugin extends Gdn_Plugin
             return $formatter;
         }
 
-        require_once __DIR__ . '/vendor/autoload.php';
+        // If classes alreadu exists, do not include vendor autoloader
+        if (!class_exists('ParsedownExtra') || !class_exists('Parsedown')) {
+            require_once __DIR__ . '/vendor/autoload.php';
+        }
 
         switch (C('Garden.InputFormatter')) {
             case 'ParsedownExtra':
@@ -67,15 +70,13 @@ class ParsedownPlugin extends Gdn_Plugin
 
         // Enable markupEscaped if settings is set to true
         if (C('Plugins.Parsedown.markupEscaped', false)) {
-            $formatter->setBreaksEnabled(true);
+            $formatter->setMarkupEscaped(true);
         }
 
         // Don't link urls, let's use the Garder Links Formatter
         $formatter->setUrlsLinked(false);
 
-
         return $formatter;
-
     }
 
     /**
