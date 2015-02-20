@@ -38,9 +38,27 @@ class ParsedownPlugin extends Gdn_Plugin
     }
 
     /**
+     * @param $Result
+     * @return mixed
+     */
+    public function Format($Result)
+    {
+        $test = new \GyD\BootstrapResponsiveEmbedFormatter\BootstrapResponsiveEmbedFormatter();
+        $Result = $test->format($Result);
+
+        $Result = $this->Parser()
+          ->text($Result);
+
+        $Result = Gdn_Format::Links($Result);
+        $Result = Gdn_Format::Mentions($Result);
+
+        return $Result;
+    }
+
+    /**
      * @return Parsedown|ParsedownExtra
      */
-    private function parser()
+    private function Parser()
     {
         static $formatter;
 
@@ -77,20 +95,5 @@ class ParsedownPlugin extends Gdn_Plugin
         $formatter->setUrlsLinked(false);
 
         return $formatter;
-    }
-
-    /**
-     * @param $Result
-     * @return mixed
-     */
-    public function Format($Result)
-    {
-        $Result = $this->parser()
-          ->text($Result);
-
-        $Result = Gdn_Format::Links($Result);
-        $Result = Gdn_Format::Mentions($Result);
-
-        return $Result;
     }
 }
