@@ -12,7 +12,7 @@
 
 $PluginInfo['Parsedown'] = array(
   'Description' => 'Adapts The New BBCode Parser to work with Vanilla.',
-  'Version' => '1.0.0',
+  'Version' => '1.0.1',
   'RequiredApplications' => array('Vanilla' => '2.1.8p2'),
   'RequiredTheme' => false,
   'RequiredPlugins' => false,
@@ -48,21 +48,17 @@ class ParsedownPlugin extends Gdn_Plugin
             return $formatter;
         }
 
-        require_once __DIR__ . '/parsedown/Parsedown.php';
+        require_once __DIR__ . '/vendor/autoload.php';
 
         switch (C('Garden.InputFormatter')) {
             case 'ParsedownExtra':
-                $parser = 'ParsedownExtra';
-                require_once __DIR__ . '/parsedown-extra/ParsedownExtra.php';
+                $formatter = new ParsedownExtra();;
                 break;
             case 'Parsedown':
             default:
-                $parser = 'Parsedown';
+                $formatter = new Parsedown();
                 break;
         }
-
-        /** @var Parsedown|ParsedownExtra $formatter */
-        $formatter = new $parser();
 
         // Enable breaklines if settings is set to true
         if (C('Plugins.Parsedown.BreaksEnabled', false)) {
