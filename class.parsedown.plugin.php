@@ -44,9 +44,12 @@ class ParsedownPlugin extends Gdn_Plugin
      * @return mixed
      */
     public function Format($Result)
-    {ini_set("display_errors", 1);
-        $embedFormatter = new \GyD\BREFormatter\BREF();
-        $Result = $embedFormatter->format($Result);
+    {
+        $this->Result = $Result;
+
+        $this->FireEvent('BeforeParsedownFormat');
+
+        $Result = $this->Result;
 
         $Result = $this->Parser()
           ->text($Result);
