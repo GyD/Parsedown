@@ -45,11 +45,11 @@ class ParsedownPlugin extends Gdn_Plugin
      */
     public function Format($Result)
     {
-        $this->Result = $Result;
+        $this->EventArguments['Result'] = $Result;
 
         $this->FireEvent('BeforeParsedownFormat');
 
-        $Result = $this->Result;
+        $Result = $this->EventArguments['Result'];
 
         $Result = $this->Parser()
           ->text($Result);
