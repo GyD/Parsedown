@@ -26,8 +26,6 @@ $PluginInfo['Parsedown'] = array(
 Gdn::FactoryInstall('ParsedownFormatter', 'ParsedownPlugin', __FILE__, Gdn::FactorySingleton);
 Gdn::FactoryInstall('ParsedownExtraFormatter', 'ParsedownPlugin', __FILE__, Gdn::FactorySingleton);
 
-require_once __DIR__ . '/vendor/autoload.php';
-
 class ParsedownPlugin extends Gdn_Plugin
 {
 
@@ -71,8 +69,11 @@ class ParsedownPlugin extends Gdn_Plugin
             return $formatter;
         }
 
+        require_once __DIR__ . '/lib/parsedown/Parsedown.php';
+
         switch (C('Garden.InputFormatter')) {
             case 'ParsedownExtra':
+                require_once __DIR__ . '/lib/parsedown-extra/ParsedownExtra.php';
                 $formatter = new ParsedownExtra();;
                 break;
             case 'Parsedown':
