@@ -1,5 +1,6 @@
 {
   "require": {
-    "erusev/parsedown-extra": "~0.7"
+    "erusev/parsedown-extra": "~0.7",
+    "gyd/bref-ormatter": "dev-master"
   }
 }

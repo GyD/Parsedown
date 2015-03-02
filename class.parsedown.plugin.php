@@ -43,8 +43,11 @@ class ParsedownPlugin extends Gdn_Plugin
      */
     public function Format($Result)
     {
-        $test = new \GyD\BootstrapResponsiveEmbedFormatter\BootstrapResponsiveEmbedFormatter();
-        $Result = $test->format($Result);
+        $this->EventArguments['Result'] = $Result;
+
+        $this->FireEvent('BeforeParsedownFormat');
+
+        $Result = $this->EventArguments['Result'];
 
         $Result = $this->Parser()
           ->text($Result);
@@ -66,13 +69,11 @@ class ParsedownPlugin extends Gdn_Plugin
             return $formatter;
         }
 
-        // If classes alreadu exists, do not include vendor autoloader
-        if (!class_exists('ParsedownExtra') || !class_exists('Parsedown')) {
-            require_once __DIR__ . '/vendor/autoload.php';
-        }
+        require_once __DIR__ . '/lib/parsedown/Parsedown.php';
 
         switch (C('Garden.InputFormatter')) {
             case 'ParsedownExtra':
+                require_once __DIR__ . '/lib/parsedown-extra/ParsedownExtra.php';
                 $formatter = new ParsedownExtra();;
                 break;
             case 'Parsedown':
