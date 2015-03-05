@@ -31,7 +31,6 @@ Gdn::FactoryInstall('ParsedownExtraFormatter', 'ParsedownPlugin', __FILE__, Gdn:
  */
 class ParsedownPlugin extends Gdn_Plugin
 {
-
     /**
      * Constructor
      */
@@ -50,7 +49,7 @@ class ParsedownPlugin extends Gdn_Plugin
     {
         $this->EventArguments['Result'] = $Result;
 
-        $this->FireEvent('BeforeParsedownFormat');
+        $this->FireEvent('BeforeFormat');
 
         $Result = $this->EventArguments['Result'];
 
