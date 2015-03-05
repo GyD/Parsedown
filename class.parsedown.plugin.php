@@ -26,6 +26,9 @@ $PluginInfo['Parsedown'] = array(
 Gdn::FactoryInstall('ParsedownFormatter', 'ParsedownPlugin', __FILE__, Gdn::FactorySingleton);
 Gdn::FactoryInstall('ParsedownExtraFormatter', 'ParsedownPlugin', __FILE__, Gdn::FactorySingleton);
 
+/**
+ * Class ParsedownPlugin
+ */
 class ParsedownPlugin extends Gdn_Plugin
 {
 
@@ -38,6 +41,8 @@ class ParsedownPlugin extends Gdn_Plugin
     }
 
     /**
+     * Apply Formatter
+     *
      * @param $Result
      * @return mixed
      */
@@ -59,6 +64,8 @@ class ParsedownPlugin extends Gdn_Plugin
     }
 
     /**
+     * Get the Parsedown OR ParsedownExtra formatter
+     *
      * @return Parsedown|ParsedownExtra
      */
     private function Parser()
