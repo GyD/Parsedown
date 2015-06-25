@@ -15,7 +15,7 @@ $PluginInfo['Parsedown'] = array(
   'Version' => '1.0.1',
   'RequiredApplications' => array('Vanilla' => '2.1.8p2'),
   'RequiredTheme' => false,
-  'RequiredPlugins' => false,
+  'RequiredPlugins' => array('HtmLawed' => '1.0.1'),
   'HasLocale' => false,
   'Author' => "GyD",
   'AuthorEmail' => 'contact@gyd.be',
@@ -47,6 +47,12 @@ class ParsedownPlugin extends Gdn_Plugin
      */
     public function Format($Result)
     {
+        // just to include htmlLawed
+        HTMLawedPlugin::instance();
+
+        // filter html with htmLawed to prevend xss
+        $Result = htmLawed($Result, array('safe'=>1), 'p,div=markdown');
+
         $this->EventArguments['Result'] = $Result;
 
         $this->FireEvent('BeforeFormat');
