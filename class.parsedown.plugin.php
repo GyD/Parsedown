@@ -50,9 +50,6 @@ class ParsedownPlugin extends Gdn_Plugin
         // just to include htmlLawed
         HTMLawedPlugin::instance();
 
-        // filter html with htmLawed to prevend xss
-        $Result = htmLawed($Result, array('safe'=>1), 'p,div=markdown');
-
         $this->EventArguments['Result'] = $Result;
 
         $this->FireEvent('BeforeFormat');
@@ -64,6 +61,9 @@ class ParsedownPlugin extends Gdn_Plugin
 
         $Result = Gdn_Format::Links($Result);
         $Result = Gdn_Format::Mentions($Result);
+
+        // filter html with htmLawed to prevend xss
+        $Result = htmLawed($Result, array('safe'=>1), 'p,div=markdown');
 
         return $Result;
     }
